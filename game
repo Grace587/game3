@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>猜拳游戏 - Vue</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <div id="app">
+        <i class="web-font">请出招</i>
+        <el-row :gutter="20">
+            <el-col :span="6">
+                <div @click="changChoose(0)" :class="['mora-card',isShiTou ? 'isActive' : '']">
+                    <div class="item-image">
+                        <img src="./images/shitou.png">
+                    </div>
+                    <div class="item-text">
+                        <i class="web-font">石头</i>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div @click="changChoose(1)" :class="['mora-card',isJianDao ? 'isActive' : '']">
+                    <div class="item-image">
+                        <img src="./images/jiandao.png">
+                    </div>
+                    <div class="item-text">
+                        <i class="web-font">剪刀</i>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div @click="changChoose(2)" :class="['mora-card',isBu ? 'isActive' : '']">
+                    <div class="item-image">
+                        <img src="./images/bu.png">
+                    </div>
+                    <div class="item-text">
+                        <i class="web-font">布</i>
+                    </div>
+                </div>
+            </el-col>
+
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="6">
+                <i class="web-font">你的选择</i>
+                <div class="mora-choose">
+                    <div class="item-image">
+                        <img :src="`./images/${imgInfo.name}.png`">
+                    </div>
+                    <div class="item-text">
+                        <i class="web-font">{{imgInfo.text}}</i>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <i class="web-font">电脑的选择</i>
+                <div class="mora-choose">
+                    <div class="item-image">
+                        <img :src="`./images/${imgInfoRobot.name}.png`">
+                    </div>
+                    <div class="item-text">
+                        <i class="web-font">{{imgInfoRobot.text}}</i>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+        <i class="web-font">{{resMsg}}</i>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data(){
+            return{
+                personChoose:0,
+                isShiTou:false,
+                isBu:false,
+                isJianDao:false,
+                imgInfo:{name:'tishi',text:'请选择'},
+                robotChoose:0,
+                isShiTouRobot:false,
+                isBuRobot:false,
+                isJianDaoRobot:false,
+                imgInfoRobot:{name:'tishi',text:'请选择'}
+            }
+        },
+        computed:{
+            resMsg(){
+                let res = '';
+                if (this.personChoose === this.robotChoose){
+                    res = '平局'
+                }
+                else if (this.personChoose === 0 && this.robotChoose === 1 || this.personChoose === 1 && this.robotChoose === 2 || this.personChoose === 2 && this.robotChoose === 0){
+                    res = '你赢了'
+                }else{
+                    res = '你输了'
+                }
+                return `结果：${res}`
+            }
+        },
+        methods:{
+            changChoose(index){
+                this.personChoose = index;
+                this.resetState();
+                if (index === 0){
+                    this.isShiTou = true;
+                    this.imgInfo = {name:'shitou',text:'石头'};
+                } else if (index === 1){
+                    this.isJianDao = true;
+                    this.imgInfo = {name:'jiandao',text:'剪刀'};
+                } else{
+                    this.isBu = true;
+                    this.imgInfo = {name:'bu',text:'布'};
+                }
+                this.robot();
+
+            },
+            robot(){
+                let index = Math.floor(Math.random()*3);
+                this.robotChoose = index;
+                if (index === 0){
+                    this.isShiTouRobot = true;
+                    this.imgInfoRobot = {name:'shitou',text:'石头'};
+                } else if (index === 1){
+                    this.isJianDaoRobot = true;
+                    this.imgInfoRobot = {name:'jiandao',text:'剪刀'};
+                } else{
+                    this.isJianDaoRobot = true;
+                    this.imgInfoRobot = {name:'bu',text:'布'};
+                }
+
+            },
+            resetState(){
+                this.isShiTou = false;
+                this.isJianDao = false;
+                this.isBu = false;
+                this.isShiTouRobot = false;
+                this.isJianDaoRobot = false;
+                this.isBuRobot = false;
+            }
+        }
+    })
+</script>
+</html>
